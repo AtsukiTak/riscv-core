@@ -1,0 +1,102 @@
+#! /opt/homebrew/Cellar/icarus-verilog/12.0/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/va_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/12.0/lib/ivl/v2009.vpi";
+S_0x11ee04cd0 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x11ee04e40 .scope module, "decoder" "decoder" 3 4;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "instr";
+    .port_info 1 /OUTPUT 32 "imm";
+    .port_info 2 /OUTPUT 5 "rs1";
+    .port_info 3 /OUTPUT 5 "rs2";
+    .port_info 4 /OUTPUT 5 "rd";
+v0x600002354a20_0 .net *"_ivl_11", 11 0, L_0x6000020543c0;  1 drivers
+v0x600002354ab0_0 .net *"_ivl_15", 0 0, L_0x600002054500;  1 drivers
+v0x600002354b40_0 .net *"_ivl_16", 19 0, L_0x6000020545a0;  1 drivers
+v0x600002354bd0_0 .net *"_ivl_19", 6 0, L_0x600002054640;  1 drivers
+v0x600002354c60_0 .net *"_ivl_21", 4 0, L_0x6000020546e0;  1 drivers
+v0x600002354cf0_0 .net *"_ivl_7", 0 0, L_0x600002054280;  1 drivers
+v0x600002354d80_0 .net *"_ivl_8", 19 0, L_0x600002054320;  1 drivers
+v0x600002354e10_0 .var "imm", 31 0;
+v0x600002354ea0_0 .net "imm_i", 31 0, L_0x600002054460;  1 drivers
+v0x600002354f30_0 .net "imm_s", 31 0, L_0x600002054780;  1 drivers
+o0x1200401f0 .functor BUFZ 32, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+v0x600002354fc0_0 .net "instr", 31 0, o0x1200401f0;  0 drivers
+v0x600002355050_0 .var "opcode", 6 0;
+v0x6000023550e0_0 .net "rd", 4 0, L_0x6000020541e0;  1 drivers
+v0x600002355170_0 .net "rs1", 4 0, L_0x6000020540a0;  1 drivers
+v0x600002355200_0 .net "rs2", 4 0, L_0x600002054140;  1 drivers
+E_0x600000454f40 .event anyedge, v0x600002355050_0, v0x600002354ea0_0, v0x600002354f30_0;
+L_0x6000020540a0 .part o0x1200401f0, 15, 5;
+L_0x600002054140 .part o0x1200401f0, 20, 5;
+L_0x6000020541e0 .part o0x1200401f0, 7, 5;
+L_0x600002054280 .part o0x1200401f0, 31, 1;
+LS_0x600002054320_0_0 .concat [ 1 1 1 1], L_0x600002054280, L_0x600002054280, L_0x600002054280, L_0x600002054280;
+LS_0x600002054320_0_4 .concat [ 1 1 1 1], L_0x600002054280, L_0x600002054280, L_0x600002054280, L_0x600002054280;
+LS_0x600002054320_0_8 .concat [ 1 1 1 1], L_0x600002054280, L_0x600002054280, L_0x600002054280, L_0x600002054280;
+LS_0x600002054320_0_12 .concat [ 1 1 1 1], L_0x600002054280, L_0x600002054280, L_0x600002054280, L_0x600002054280;
+LS_0x600002054320_0_16 .concat [ 1 1 1 1], L_0x600002054280, L_0x600002054280, L_0x600002054280, L_0x600002054280;
+LS_0x600002054320_1_0 .concat [ 4 4 4 4], LS_0x600002054320_0_0, LS_0x600002054320_0_4, LS_0x600002054320_0_8, LS_0x600002054320_0_12;
+LS_0x600002054320_1_4 .concat [ 4 0 0 0], LS_0x600002054320_0_16;
+L_0x600002054320 .concat [ 16 4 0 0], LS_0x600002054320_1_0, LS_0x600002054320_1_4;
+L_0x6000020543c0 .part o0x1200401f0, 20, 12;
+L_0x600002054460 .concat [ 12 20 0 0], L_0x6000020543c0, L_0x600002054320;
+L_0x600002054500 .part o0x1200401f0, 31, 1;
+LS_0x6000020545a0_0_0 .concat [ 1 1 1 1], L_0x600002054500, L_0x600002054500, L_0x600002054500, L_0x600002054500;
+LS_0x6000020545a0_0_4 .concat [ 1 1 1 1], L_0x600002054500, L_0x600002054500, L_0x600002054500, L_0x600002054500;
+LS_0x6000020545a0_0_8 .concat [ 1 1 1 1], L_0x600002054500, L_0x600002054500, L_0x600002054500, L_0x600002054500;
+LS_0x6000020545a0_0_12 .concat [ 1 1 1 1], L_0x600002054500, L_0x600002054500, L_0x600002054500, L_0x600002054500;
+LS_0x6000020545a0_0_16 .concat [ 1 1 1 1], L_0x600002054500, L_0x600002054500, L_0x600002054500, L_0x600002054500;
+LS_0x6000020545a0_1_0 .concat [ 4 4 4 4], LS_0x6000020545a0_0_0, LS_0x6000020545a0_0_4, LS_0x6000020545a0_0_8, LS_0x6000020545a0_0_12;
+LS_0x6000020545a0_1_4 .concat [ 4 0 0 0], LS_0x6000020545a0_0_16;
+L_0x6000020545a0 .concat [ 16 4 0 0], LS_0x6000020545a0_1_0, LS_0x6000020545a0_1_4;
+L_0x600002054640 .part o0x1200401f0, 25, 7;
+L_0x6000020546e0 .part o0x1200401f0, 7, 5;
+L_0x600002054780 .concat [ 5 7 20 0], L_0x6000020546e0, L_0x600002054640, L_0x6000020545a0;
+    .scope S_0x11ee04e40;
+T_0 ;
+    %load/vec4 v0x600002354fc0_0;
+    %parti/s 7, 0, 2;
+    %store/vec4 v0x600002355050_0, 0, 7;
+    %end;
+    .thread T_0, $init;
+    .scope S_0x11ee04e40;
+T_1 ;
+Ewait_0 .event/or E_0x600000454f40, E_0x0;
+    %wait Ewait_0;
+    %load/vec4 v0x600002355050_0;
+    %dup/vec4;
+    %pushi/vec4 3, 0, 7;
+    %cmp/u;
+    %jmp/1 T_1.0, 6;
+    %dup/vec4;
+    %pushi/vec4 35, 0, 7;
+    %cmp/u;
+    %jmp/1 T_1.1, 6;
+    %vpi_call/w 3 20 "$warning", "value is unhandled for priority or unique case statement" {0 0 0};
+    %jmp T_1.2;
+T_1.0 ;
+    %load/vec4 v0x600002354ea0_0;
+    %store/vec4 v0x600002354e10_0, 0, 32;
+    %jmp T_1.2;
+T_1.1 ;
+    %load/vec4 v0x600002354f30_0;
+    %store/vec4 v0x600002354e10_0, 0, 32;
+    %jmp T_1.2;
+T_1.2 ;
+    %pop/vec4 1;
+    %jmp T_1;
+    .thread T_1, $push;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "-";
+    "decoder.sv";
