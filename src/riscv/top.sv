@@ -1,11 +1,11 @@
-`include "pc.sv"
-`include "registers.sv"
-`include "alu.sv"
-`include "decoder.sv"
-`include "ram.sv"
-`include "controller.sv"
-`include "types.sv"
-`include "csr.sv"
+`include "riscv/pc.sv"
+`include "riscv/registers.sv"
+`include "riscv/alu.sv"
+`include "riscv/decoder.sv"
+`include "riscv/ram.sv"
+`include "riscv/controller.sv"
+`include "riscv/types.sv"
+`include "riscv/csr.sv"
 
 module top #(
   parameter PC_INIT = 32'h8000_0000,

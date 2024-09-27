@@ -1,7 +1,7 @@
 `ifndef __ALU_SV
 `define __ALU_SV
 
-`include "types.sv"
+`include "riscv/types.sv"
 
 module alu(
   input logic [31:0] src_a,

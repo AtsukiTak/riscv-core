@@ -1,5 +1,5 @@
-`include "top.sv"
-`include "ram.sv"
+`include "riscv/top.sv"
+`include "riscv/ram.sv"
 
 module top_tb();
   parameter MEM_SIZE = 'h4048;

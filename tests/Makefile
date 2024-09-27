@@ -1,4 +1,4 @@
-SRC = $(wildcard ../src/*.sv)
+SRC = $(wildcard ../src/riscv/*.sv)
 
 .PHONY: test_riscv_all
 
