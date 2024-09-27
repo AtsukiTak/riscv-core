@@ -8,7 +8,7 @@
 `include "riscv/csr.sv"
 
 module top #(
-  parameter PC_INIT = 32'h8000_0000,
+  parameter PC_INIT,
   parameter int MEM_SIZE
 ) (
   input wire clk,
@@ -44,9 +44,9 @@ module top #(
   logic [31:0] reg_wd3;
 
   // CSR inputs and outputs
-  logic [31:0] csr_addr1;
-  logic [31:0] csr_addr2;
-  logic [31:0] csr_addr3;
+  logic [11:0] csr_addr1;
+  logic [11:0] csr_addr2;
+  logic [11:0] csr_addr3;
   logic [31:0] csr_rd1;
   logic [31:0] csr_rd2;
   logic [31:0] csr_rd3;
@@ -74,7 +74,7 @@ module top #(
   // Instantiate RAM
   ram #(
     .MEM_SIZE(MEM_SIZE),
-    .START_ADDR(32'h8000_0000)
+    .START_ADDR(PC_INIT)
   ) ram0(
     // Inputs
     .clk(clk),
@@ -111,7 +111,6 @@ module top #(
   registers regs0(
     // Inputs
     .clk(clk),
-    .rst_n(rst_n),
     .a1(instr_rs1),
     .a2(instr_rs2),
     .a3(instr_rd),
