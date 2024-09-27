@@ -164,14 +164,15 @@ module top #(
     .imm_b(instr_imm_b),
     .imm_u(instr_imm_u),
     .imm_j(instr_imm_j),
+    .rs1(instr_rs1),
     .rs1_rd(reg_rd1),
     .rs2_rd(reg_rd2),
-    .pc(pc),
-    .alu_out(alu_out),
-    .mem_out(ram_rd),
     .csr_rd1(csr_rd1),
     .csr_rd2(csr_rd2),
     .csr_rd3(csr_rd3),
+    .alu_out(alu_out),
+    .mem_out(ram_rd),
+    .pc(pc),
 
     // Outputs
     .pc_next(pc_next),
