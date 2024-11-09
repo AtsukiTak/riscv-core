@@ -12,7 +12,8 @@ module top #(
   parameter int MEM_SIZE
 ) (
   input wire clk,
-  input wire rst_n
+  input wire rst_n,
+  output wire [31:0] reg4
 );
   logic [31:0] pc;
   logic [31:0] pc_next;
@@ -119,7 +120,8 @@ module top #(
 
     // Outputs
     .rd1(reg_rd1),
-    .rd2(reg_rd2)
+    .rd2(reg_rd2),
+    .reg4(reg4)
   );
 
   // Instantiate CSR module
@@ -175,10 +177,9 @@ module top #(
     .pc(pc),
 
     // Outputs
-    .pc_next(pc_next),
+    .alu_op(alu_op),
     .alu_src_a(alu_src_a),
     .alu_src_b(alu_src_b),
-    .alu_op(alu_op),
     .mem_addr(ram_addr),
     .mem_we(ram_we),
     .mem_wd(ram_wd),
@@ -192,6 +193,7 @@ module top #(
     .csr_we3(csr_we3),
     .csr_wd1(csr_wd1),
     .csr_wd2(csr_wd2),
-    .csr_wd3(csr_wd3)
+    .csr_wd3(csr_wd3),
+    .pc_next(pc_next)
   );
 endmodule

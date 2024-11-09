@@ -16,7 +16,7 @@ module csr(
   output logic [31:0] csr_rd2,
   output logic [31:0] csr_rd3
 );
-  logic [31:0] csr [0:4095];
+  logic [31:0] csr [0:4];
 
   always_ff @(posedge clk) begin
     if (csr_we1) begin

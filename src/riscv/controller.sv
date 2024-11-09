@@ -1,5 +1,5 @@
-`ifndef __CONTROLLER_SC
-`define __CONTROLLER_SC
+`ifndef __CONTROLLER_SV
+`define __CONTROLLER_SV
 
 `include "riscv/types.sv"
 
@@ -68,6 +68,26 @@ module controller(
   wire [31:0] csr_imm = {{27{1'b0}}, rs1};
 
   always_comb begin
+    // デフォルト値としてnopを設定（always_combの中では全ての信号に値を設定す
+    // る必要がある）
+    alu_op = ALU_ADD;
+    alu_src_a = 0;
+    alu_src_b = 0;
+    mem_addr = 0;
+    mem_we = 0;
+    mem_wd = 0;
+    rd_we = 0;
+    rd_wd = 0;
+    csr_addr1 = 0;
+    csr_addr2 = 0;
+    csr_addr3 = 0;
+    csr_we1 = 0;
+    csr_we2 = 0;
+    csr_we3 = 0;
+    csr_wd1 = 0;
+    csr_wd2 = 0;
+    csr_wd3 = 0;
+    pc_next = pc + 4;
     case(opcode)
       7'b0000011: begin // Load Ops (I-Type)
         alu_op = ALU_ADD;
@@ -75,14 +95,13 @@ module controller(
         alu_src_b = sign_ext_imm_i;
         mem_addr = alu_out;
         rd_we = 1;
-        mem_we = 0;
-        pc_next = pc + 4;
         case (funct3)
           3'b000: rd_wd = sign_ext_byte_mem_out; // lb
           3'b001: rd_wd = sign_ext_half_mem_out; // lh
           3'b010: rd_wd = mem_out; // lw
           3'b100: rd_wd = unsign_ext_byte_mem_out; // lbu
           3'b101: rd_wd = unsign_ext_half_mem_out; // lhu
+          default: ; // do nothing
         endcase
       end
       7'b0010011: begin // Imm ALU Ops (I-Type)
@@ -90,8 +109,6 @@ module controller(
         alu_src_b = sign_ext_imm_i;
         rd_we = 1;
         rd_wd = alu_out;
-        mem_we = 0;
-        pc_next = pc + 4;
         case (funct3)
           3'b000: alu_op = ALU_ADD; // addi
           3'b001: alu_op = ALU_SLL; // slli
@@ -102,10 +119,12 @@ module controller(
             case (funct7)
               7'b0000000: alu_op = ALU_SRL; // srli
               7'b0100000: alu_op = ALU_SRA; // srai
+              default: ; // do nothing
             endcase
           end
           3'b110: alu_op = ALU_OR; // ori
           3'b111: alu_op = ALU_AND; // andi
+          default: ; // do nothing
         endcase
       end
       7'b0010111: begin // auipc (rd = upimm + PC, upimm = imm_u << 12)
@@ -114,8 +133,6 @@ module controller(
         alu_src_b = upimm;
         rd_we = 1;
         rd_wd = alu_out;
-        mem_we = 0;
-        pc_next = pc + 4;
       end
       7'b0100011: begin // Store Ops (S-Type)
         alu_op = ALU_ADD;
@@ -123,12 +140,11 @@ module controller(
         alu_src_b = sign_ext_imm_s;
         mem_addr = alu_out;
         mem_we = 1;
-        rd_we = 0;
-        pc_next = pc + 4;
         case (funct3)
           3'b000: mem_wd = byte_store_data; // sb
           3'b001: mem_wd = half_store_data; // sh
           3'b010: mem_wd = rs2_rd; // sw
+          default: ; // do nothing
         endcase
       end
       7'b0110011: begin // ALU Ops (R-Type)
@@ -136,13 +152,12 @@ module controller(
         alu_src_b = rs2_rd;
         rd_we = 1;
         rd_wd = alu_out;
-        mem_we = 0;
-        pc_next = pc + 4;
         case (funct3)
           3'b000: begin
             case (funct7)
               7'b0000000: alu_op = ALU_ADD; // add
               7'b0100000: alu_op = ALU_SUB; // sub
+              default: ; // do nothing
             endcase
           end
           3'b001: alu_op = ALU_SLL; // sll
@@ -153,24 +168,21 @@ module controller(
             case (funct7)
               7'b0000000: alu_op = ALU_SRL; // srl
               7'b0100000: alu_op = ALU_SRA; // sra
+              default: ; // do nothing
             endcase
           end
           3'b110: alu_op = ALU_OR; // or
           3'b111: alu_op = ALU_AND; // and
+          default: ; // do nothing
         endcase
       end
       7'b0110111: begin // lui (rd = upimm, upimm = imm_u << 12)
         rd_we = 1;
         rd_wd = upimm;
-        mem_we = 0;
-        pc_next = pc + 4;
       end
       7'b1100011: begin // Branch Ops (B-Type)
-        pc_next = pc + 4;
         alu_src_a = rs1_rd;
         alu_src_b = rs2_rd;
-        rd_we = 0;
-        mem_we = 0;
         case (funct3)
           3'b000: begin // beq
             alu_op = ALU_SUB;
@@ -208,6 +220,7 @@ module controller(
               pc_next = branch_addr;
             end
           end
+          default: ; // do nothing
         endcase
       end
       7'b1100111: begin // jalr
@@ -219,8 +232,6 @@ module controller(
         // レジスタには現在のpc+4を書き込む
         rd_we = 1;
         rd_wd = pc + 4;
-        // メモリアクセスはなし
-        mem_we = 0;
       end
       7'b1101111: begin // jal
         // pcの更新
@@ -228,8 +239,6 @@ module controller(
         // レジスタには現在のpc+4を書き込む
         rd_we = 1;
         rd_wd = pc + 4;
-        // メモリアクセスはなし
-        mem_we = 0;
       end
       7'b1110011: begin // System Ops
         case (funct3)
@@ -253,32 +262,20 @@ module controller(
               end
               12'h001: begin // ebreak
                 // nopとして実装
-                pc_next = pc + 4;
-                rd_we = 0;
-                mem_we = 0;
               end
               12'h002: begin // uret
                 // nopとして実装
-                pc_next = pc + 4;
-                rd_we = 0;
-                mem_we = 0;
               end
               12'h102: begin // sret
                 // nopとして実装
-                pc_next = pc + 4;
-                rd_we = 0;
-                mem_we = 0;
               end
               12'h302: begin // mret
                 // nopとして実装
-                pc_next = pc + 4;
-                rd_we = 0;
-                mem_we = 0;
               end
+              default: ; // do nothing
             endcase
           end
           3'b001: begin // csrrw
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -288,7 +285,6 @@ module controller(
             csr_wd1 = rs1_rd;
           end
           3'b010: begin // csrrs
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -298,7 +294,6 @@ module controller(
             csr_wd1 = csr_rd1 | rs1_rd;
           end
           3'b011: begin // csrrc
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -308,7 +303,6 @@ module controller(
             csr_wd1 = csr_rd1 & ~rs1_rd;
           end
           3'b101: begin // csrrwi
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -318,7 +312,6 @@ module controller(
             csr_wd1 = csr_imm;
           end
           3'b110: begin // csrrsi
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -328,7 +321,6 @@ module controller(
             csr_wd1 = csr_rd1 | csr_imm;
           end
           3'b111: begin // csrrci
-            pc_next = pc + 4;
             // レジスタにCSRの値を書き込む
             rd_we = 1;
             rd_wd = csr_rd1;
@@ -337,15 +329,11 @@ module controller(
             csr_we1 = 1;
             csr_wd1 = csr_rd1 & ~csr_imm;
           end
+          default: ; // do nothing
         endcase
       end
       7'b0001111: begin // fence, fence.i
         // nopとして実装
-        pc_next = pc + 4;
-        rd_we = 0;
-        mem_we = 0;
-      end
-      7'bx: begin
       end
       default: begin
         $error("Unknown opcode: %b at 0x%h", opcode, pc);
