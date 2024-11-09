@@ -336,8 +336,6 @@ module controller(
         // nopとして実装
       end
       default: begin
-        $error("Unknown opcode: %b at 0x%h", opcode, pc);
-        $fatal(1);
       end
     endcase
   end

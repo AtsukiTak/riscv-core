@@ -79,6 +79,7 @@ module top #(
   ) ram0(
     // Inputs
     .clk(clk),
+    .rst_n(rst_n),
     .addr1(pc), // RAMから命令を読み出す
     .addr2(ram_addr),
     .we2(ram_we),
@@ -112,6 +113,7 @@ module top #(
   registers regs0(
     // Inputs
     .clk(clk),
+    .rst_n(rst_n),
     .a1(instr_rs1),
     .a2(instr_rs2),
     .a3(instr_rd),

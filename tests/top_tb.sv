@@ -16,6 +16,11 @@ module top_tb();
   string memfile;
 
   initial begin
+    // 波形ファイルのdump
+    // $dumpfile("top_tb.vcd");
+    // $dumpvars(0, top0);
+
+    // メモリファイルの読み込み
     if (!$value$plusargs("memfile=%s", memfile))
       $fatal(1, "memfile is not specified");
 

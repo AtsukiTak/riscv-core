@@ -4,13 +4,13 @@
 module registers(
   input logic clk,
   input logic rst_n,
-  // port 1
+  // port 1（読み込み用）
   input logic [4:0] a1,
   output logic [31:0] rd1,
-  // port 2
+  // port 2（読み込み用）
   input logic [4:0] a2,
   output logic [31:0] rd2,
-  // port 3
+  // port 3（書き込み用）
   input logic [4:0] a3,
   input logic we3,
   input logic [31:0] wd3,
